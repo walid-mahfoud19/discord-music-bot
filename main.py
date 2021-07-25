@@ -36,11 +36,16 @@ async def play_url(ctx, url):
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
     voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
 
+    def repeat(guild, voice, audio):
+        voice.play(audio, after=lambda e: repeat(guild, voice, audio))
+        voice.is_playing()
+    
     if not voice.is_playing():
         with YoutubeDL(YDL_OPTIONS) as ydl:
             info = ydl.extract_info(url, download=False)
         URL = info['url']
-        voice.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
+        audio = FFmpegPCMAudio(URL, **FFMPEG_OPTIONS)
+        voice.play(audio, after=lambda e: repeat(guild, voice, audio)
         voice.is_playing()
         await ctx.send('Bot is playing')
 
