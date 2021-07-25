@@ -119,9 +119,9 @@ async def now_playing(ctx):
     await ctx.send(audio_list[i])
 
 
-#token = os.environ['token']
+token = os.environ['TOKEN']
 
-token = ''
+#token = ''
 
 #keep_alive()
 client.run(token)
