@@ -121,7 +121,7 @@ async def now_playing(ctx):
 
 #token = os.environ['token']
 
-token = 'ODY4Mzc1NTY4ODM0NTAyNjc2.YPuvxQ.s9IffCEjxPl03QpHHCv-PABzF1I'
+token = ''
 
 #keep_alive()
 client.run(token)
