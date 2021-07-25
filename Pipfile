@@ -7,7 +7,6 @@ name = "pypi"
 discord = "*"
 youtube-dl = "*"
 pynacl = "*"
-rq = "*"
 
 [dev-packages]
 
