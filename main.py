@@ -10,6 +10,9 @@ client = commands.Bot(command_prefix = '.')
 audio_list = ['2h-ost.mp3', '1h-ost.mp3']
 i = 0
 
+urls = []
+j = 0
+
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
@@ -46,8 +49,56 @@ async def play_url(ctx, url):
         await ctx.send('Bot is playing')
 
 
+@client.command()
+async def add_url(ctx, url):
+    urls.append(url)
+    print(f'{url} succesfully added to playlist!')
+
+
+@client.command()
+async def show_urls(ctx):
+    print(urls)
+    await ctx.send(str(urls))
+
+
+@client.command()
+async def show_url(ctx):
+    print(urls[j % len(urls)])
+    await ctx.send(urls[j % len(urls)])
+
+
+@client.command()
+async def play_urls(ctx):
+    YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
+    FFMPEG_OPTIONS = {
+        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+
+    url = urls[j]
+
+    def next_url(urls, voice, YDL_OPTIONS, FFMPEG_OPTIONS, j):
+        j += 1
+        url = urls[j % len(urls)]
+        with YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(url, download=False)
+        URL = info['url']
+        voice.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS), after=lambda e: next_url(urls, voice, YDL_OPTIONS, FFMPEG_OPTIONS, i))
+        voice.is_playing()
+        print('Now playing : ' + url)
+
+    if not voice.is_playing():
+        with YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(url, download=False)
+        URL = info['url']
+        voice.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS), after=lambda e: next_url(urls, voice, YDL_OPTIONS, FFMPEG_OPTIONS, j))
+        voice.is_playing()
+        print('Now playing : ' + url)
+        await ctx.send('Bot is playing')
+
+
 async def send_message(ctx, msg):
     await ctx.send(msg)
+
 
 @client.command()
 async def play_files(ctx):
