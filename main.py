@@ -45,7 +45,7 @@ async def play_url(ctx, url):
             info = ydl.extract_info(url, download=False)
         URL = info['url']
         audio = FFmpegPCMAudio(URL, **FFMPEG_OPTIONS)
-        voice.play(audio, after=lambda e: repeat(guild, voice, audio)
+        voice.play(audio, after=lambda e: repeat(guild, voice, audio))
         voice.is_playing()
         await ctx.send('Bot is playing')
 
