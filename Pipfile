@@ -8,6 +8,7 @@ discord = "*"
 youtube-dl = "*"
 pynacl = "*"
 rq = "*"
+flask = "*"
 
 [dev-packages]
 

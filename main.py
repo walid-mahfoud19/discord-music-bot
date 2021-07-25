@@ -3,7 +3,7 @@ from discord.ext import commands
 import os
 from discord import FFmpegPCMAudio
 from youtube_dl import YoutubeDL
-import rq
+from web_server import keep_alive
 
 client = commands.Bot(command_prefix = '.')
 
@@ -68,7 +68,14 @@ async def show_url(ctx):
 
 
 @client.command()
-async def play_urls(ctx):
+async def next_url(ctx, j=j):
+    await stop(ctx)
+    j += 1
+    await play_urls(ctx, j)
+
+
+@client.command()
+async def play_urls(ctx, j=j):
     YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
     FFMPEG_OPTIONS = {
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
@@ -152,6 +159,7 @@ async def stop(ctx):
     voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
     if voice.is_playing():
         voice.stop()
+        urls.clear()
         await ctx.send('Stopping...')
 
 
@@ -169,7 +177,8 @@ async def show_files(ctx):
 async def now_playing(ctx):
     await ctx.send(audio_list[i])
 
+
 token = os.environ['token']
 
-#keep_alive()
+keep_alive()
 client.run(token)
