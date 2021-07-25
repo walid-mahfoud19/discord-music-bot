@@ -3,7 +3,6 @@ from discord.ext import commands
 import os
 from discord import FFmpegPCMAudio
 from youtube_dl import YoutubeDL
-from web_server import keep_alive
 
 client = commands.Bot(command_prefix = '.')
 
@@ -180,5 +179,5 @@ async def now_playing(ctx):
 
 token = os.environ['token']
 
-keep_alive()
+
 client.run(token)
