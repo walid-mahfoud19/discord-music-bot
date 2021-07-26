@@ -208,4 +208,4 @@ async def restart(ctx):
 token = os.environ['token']
 
 
-client.run(token)
+client.run('ODY4Mzc1NTY4ODM0NTAyNjc2.YPuvxQ.0UUjG7WMUBlrbAuRlFQMTKnf1bk')
