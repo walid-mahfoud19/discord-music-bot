@@ -1,8 +1,23 @@
-import urllib.request
-import re
+from youtube_search import YoutubeSearch
 
 
-def get_url(search_keyword):
-    html = urllib.request.urlopen("https://www.youtube.com/results?search_query=" + search_keyword.replace(" ", "+"))
-    video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-    return "https://www.youtube.com/watch?v=" + video_ids[0]
+class Video:
+    def __init__(self, title, duration, url_suffix):
+        self.title = title
+        self.duration = duration
+        self.url_suffix = url_suffix
+        self.url = 'https://www.youtube.com/' + url_suffix
+
+
+def get_urls(r, n_v):
+    results_list = YoutubeSearch(r, max_results=n_v).to_dict()
+    titles = []
+    urls = []
+    videos = []
+    for vid in results_list:
+        title = vid['title']
+        titles.append(title)
+        url = 'https://www.youtube.com/' + vid['url_suffix']
+        urls.append(url)
+        video = Video(title, vid['duration'], vid['url_suffix'])
+    return titles, urls

@@ -62,17 +62,18 @@ async def play_url(ctx, url):
 
 
 @client.command()
-async def add_url(ctx, url):
-    urls.append(url)
-    print(f'{url} succesfully added to playlist!')
+async def search_video(ctx, r_sep, n_v_str):
+    r = r_sep.replace("-", " ")
+    titles_r, urls_r = get_urls(r, int(n_v_str))
+    for title in titles_r:
+        await ctx.send(str(titles_r.index(title) + 1) + ": " + str(title))
+    urls.extend(urls_r)
 
 
 @client.command()
-async def add_video(ctx, r):
-    url = get_url(r)
+async def add_url(ctx, url):
     urls.append(url)
     print(f'{url} succesfully added to playlist!')
-    await ctx.send(str(url))
 
 
 @client.command()
@@ -89,7 +90,7 @@ async def show_url(ctx):
 
 @client.command()
 async def next_url(ctx):
-    await stop(ctx)
+    await pause(ctx)
     c.j += 1
     await play_urls(ctx)
 
@@ -198,13 +199,13 @@ async def now_playing(ctx):
 
 
 @client.command()
-async def restart():
-    await stop()
-    await leave()
+async def restart(ctx):
+    await stop(ctx)
+    await leave(ctx)
     c.reset()
 
 
-token = os.environ['token']
+#token = os.environ['token']
 
 
-client.run(token)
+client.run('ODY4Mzc1NTY4ODM0NTAyNjc2.YPuvxQ.0UUjG7WMUBlrbAuRlFQMTKnf1bk')
